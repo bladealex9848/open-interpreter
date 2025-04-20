@@ -68,6 +68,8 @@ def run_interpreter_with_command(
         # Ejecutar Open Interpreter con el comando
         print(f"Ejecutando Open Interpreter con el comando...")
 
+        # No añadimos --quiet porque no es compatible
+
         # Abrir el archivo de entrada
         with open(temp_path, "r") as input_file:
             # Ejecutar el proceso con la entrada del archivo
@@ -107,6 +109,8 @@ def run_interpreter_interactive(model="gpt-4.1-nano", auto_run=True, verbose=Tru
 
     if verbose:
         args.append("-v")
+
+    # No añadimos --quiet porque no es compatible
 
     # Ejecutar Open Interpreter interactivamente
     print(f"Iniciando Open Interpreter con modelo {model}...")

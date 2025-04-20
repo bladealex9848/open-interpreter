@@ -182,5 +182,30 @@ run_interpreter() {
     deactivate
 }
 
-# Ejecutar Open Interpreter con los argumentos proporcionados
-run_interpreter "$@"
+# Función para manejar la salida y filtrar errores
+filter_output() {
+    # Crear un archivo temporal para la salida completa
+    local temp_file=$(mktemp)
+    cat > "$temp_file"
+
+    # Extraer y mostrar solo las partes importantes
+    echo -e "${GREEN}=== Resultado de Open Interpreter ===${NC}"
+
+    # Mostrar el código ejecutado y su resultado
+    grep -A 100 "^>" "$temp_file" | grep -v "EOFError" | grep -v "KeyboardInterrupt" | grep -v "Traceback" | \
+    grep -v "Exception" | grep -v "Error:" | grep -v "Was Open Interpreter helpful" | \
+    grep -v "^  File " | grep -v "During handling" | grep -v "^             " | \
+    grep -v "^    " | grep -v "^<" | grep -v "^>" | grep -v "^Exiting..."
+
+    # Eliminar el archivo temporal
+    rm "$temp_file"
+}
+
+# Verificar si se está ejecutando en modo interactivo o con comandos
+if [ $# -eq 0 ] || [ "$1" = "--help" ]; then
+    # Modo interactivo o ayuda - no filtrar la salida
+    run_interpreter "$@"
+else
+    # Modo comando - filtrar la salida
+    run_interpreter "$@" 2>&1 | filter_output
+fi
