@@ -1,0 +1,13 @@
+{
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "augment.terminal.defaultProfile": "Git Bash",
+    "terminal.integrated.profiles.windows": {
+        "Git Bash": {
+            "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "args": []
+        }
+    },
+    "powershell.integratedConsole.showOnStartup": false,
+    "powershell.promptToUpdatePowerShell": false,
+    "powershell.startAutomatically": false
+}
