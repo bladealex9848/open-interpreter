@@ -83,6 +83,32 @@ oi "Crea un script en Python que organice fotos en carpetas según su fecha de c
 oi "Crea una aplicación web simple en Python usando Flask que muestre el clima actual basado en la ubicación del usuario"
 ```
 
+## Uso en diferentes sistemas operativos
+
+### macOS/Linux (Terminal)
+
+En macOS y Linux, puedes usar Open Interpreter con el comando `oi` en la terminal:
+
+```bash
+oi "Tu instrucción aquí"
+```
+
+### Windows (PowerShell)
+
+En Windows, puedes usar Open Interpreter con el comando `oi` en PowerShell:
+
+```powershell
+oi "Tu instrucción aquí"
+```
+
+Si es la primera vez que usas Open Interpreter en PowerShell, debes configurarlo primero:
+
+```powershell
+cd "X:\Ruta\A\open-interpreter"  # Reemplaza con la ruta correcta
+.\setup_powershell.ps1
+. $PROFILE  # O reinicia PowerShell
+```
+
 ## Configuración y opciones avanzadas
 
 ### Modelos disponibles
