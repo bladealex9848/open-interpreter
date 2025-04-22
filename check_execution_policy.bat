@@ -1,0 +1,6 @@
+@echo off
+echo Verificando la política de ejecución de PowerShell...
+powershell -Command "Get-ExecutionPolicy -Scope CurrentUser"
+echo.
+echo Presiona cualquier tecla para continuar...
+pause > nul

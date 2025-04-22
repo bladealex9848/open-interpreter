@@ -56,12 +56,46 @@ if (Test-Path $profilePath) {
     Write-Host "Creado nuevo perfil de PowerShell con el alias 'oi'." -ForegroundColor Green
 }
 
+# Verificar si Open Interpreter está instalado globalmente
+$interpreterInstalled = $false
+try {
+    $interpreterVersion = bash -c "interpreter --version 2>/dev/null || echo 'not installed'"
+    if ($interpreterVersion -ne "not installed") {
+        $interpreterInstalled = $true
+        Write-Host "Open Interpreter está instalado globalmente: $interpreterVersion" -ForegroundColor Green
+    }
+} catch {
+    # No hacer nada si hay un error
+}
+
+if (-not $interpreterInstalled) {
+    Write-Host "Open Interpreter no está instalado globalmente." -ForegroundColor Yellow
+    $installGlobally = Read-Host "¿Deseas instalar Open Interpreter globalmente? (s/n)"
+    
+    if ($installGlobally -eq "s") {
+        Write-Host "Instalando Open Interpreter globalmente..." -ForegroundColor Yellow
+        bash -c "pip install open-interpreter"
+        
+        # Verificar la instalación
+        try {
+            $interpreterVersion = bash -c "interpreter --version 2>/dev/null || echo 'not installed'"
+            if ($interpreterVersion -ne "not installed") {
+                Write-Host "Open Interpreter instalado correctamente: $interpreterVersion" -ForegroundColor Green
+            } else {
+                Write-Host "No se pudo verificar la instalación de Open Interpreter." -ForegroundColor Red
+            }
+        } catch {
+            Write-Host "Error al verificar la instalación de Open Interpreter." -ForegroundColor Red
+        }
+    }
+}
+
 Write-Host ""
 Write-Host "Configuración completada. Para activar el alias en la sesión actual, ejecuta:" -ForegroundColor Cyan
 Write-Host ". `$PROFILE" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "O simplemente ejecuta:" -ForegroundColor Cyan
-Write-Host "$oiScriptPath" -ForegroundColor Yellow
+Write-Host "$oiScriptPath \"Tu instrucción\"" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Después podrás usar el comando 'oi' para ejecutar Open Interpreter:" -ForegroundColor Cyan
 Write-Host "oi \"¿Qué día es hoy?\"" -ForegroundColor Yellow

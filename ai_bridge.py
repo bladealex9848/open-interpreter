@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-AI Bridge para Open Interpreter
+AI Bridge para Open Interpreter (Versión Windows)
 Este script permite que un asistente de IA pueda enviar comandos a Open Interpreter
 y recibir los resultados.
 """
@@ -18,25 +18,28 @@ from pathlib import Path
 # Directorio base donde se encuentra Open Interpreter
 BASE_DIR = Path(__file__).parent.absolute()
 VENV_DIR = BASE_DIR / "venv"
-VENV_PYTHON = VENV_DIR / "bin" / "python"
+VENV_PYTHON = VENV_DIR / "Scripts" / "python.exe"
 
 
 def activate_venv():
     """Activa el entorno virtual para Open Interpreter"""
     if not VENV_DIR.exists():
-        print("Error: El entorno virtual no existe. Ejecuta setup_env.sh primero.")
+        print("Error: El entorno virtual no existe. Ejecuta setup_env.bat primero.")
         sys.exit(1)
 
     # Configurar variables de entorno para el entorno virtual
     os.environ["VIRTUAL_ENV"] = str(VENV_DIR)
-    os.environ["PATH"] = f"{VENV_DIR}/bin:{os.environ['PATH']}"
+    os.environ["PATH"] = f"{VENV_DIR}\\Scripts;{os.environ['PATH']}"
 
     # Verificar que estamos usando el Python del entorno virtual
-    python_path = subprocess.check_output(["which", "python"]).decode().strip()
-    if not python_path.startswith(str(VENV_DIR)):
-        print(
-            f"Advertencia: No se pudo activar el entorno virtual. Usando Python de: {python_path}"
-        )
+    try:
+        python_path = subprocess.check_output(["where", "python"], shell=True).decode().strip().split("\n")[0]
+        if not str(VENV_DIR) in python_path:
+            print(
+                f"Advertencia: No se pudo activar el entorno virtual. Usando Python de: {python_path}"
+            )
+    except subprocess.CalledProcessError:
+        print("Advertencia: No se pudo determinar la ruta de Python")
 
 
 def run_interpreter_with_command(
@@ -53,7 +56,7 @@ def run_interpreter_with_command(
         activate_venv()
 
         # Construir los argumentos para Open Interpreter
-        interpreter_path = VENV_DIR / "bin" / "interpreter"
+        interpreter_path = VENV_DIR / "Scripts" / "interpreter.exe"
         args = [str(interpreter_path)]
 
         if model:
@@ -98,7 +101,7 @@ def run_interpreter_interactive(model="gpt-4.1-nano", auto_run=True, verbose=Tru
     activate_venv()
 
     # Construir los argumentos para Open Interpreter
-    interpreter_path = VENV_DIR / "bin" / "interpreter"
+    interpreter_path = VENV_DIR / "Scripts" / "interpreter.exe"
     args = [str(interpreter_path)]
 
     if model:
@@ -114,7 +117,9 @@ def run_interpreter_interactive(model="gpt-4.1-nano", auto_run=True, verbose=Tru
 
     # Ejecutar Open Interpreter interactivamente
     print(f"Iniciando Open Interpreter con modelo {model}...")
-    os.execvp(args[0], args)
+
+    # En Windows, usamos subprocess.call en lugar de os.execvp
+    subprocess.call(args)
 
 
 def main():
