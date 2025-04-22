@@ -26,7 +26,7 @@ if ! command -v interpreter &> /dev/null; then
     read -p "¿Deseas instalar Open Interpreter globalmente? (s/n): " INSTALL
     if [ "$INSTALL" = "s" ]; then
         echo "Instalando Open Interpreter..."
-        pip install open-interpreter
+        python3 -m pip install open-interpreter || pip3 install open-interpreter || python -m pip install open-interpreter
     fi
 fi
 
@@ -37,7 +37,7 @@ function Invoke-OpenInterpreter {
         [Parameter(ValueFromRemainingArguments=\$true)]
         [string[]]\$Arguments
     )
-    
+
     & '$BRIDGE_SCRIPT' \$Arguments
 }
 
